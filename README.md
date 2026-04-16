@@ -2,6 +2,7 @@
 Step 1: Understand the Architecture
 App Server (app-vm) → Runs Tomcat + Java App
 DB Server (db-vm) → Runs MySQL
+
 Flow:
 Browser → App VM (Port 8080) → DB VM (Port 3306)
 
@@ -42,12 +43,15 @@ CREATE USER 'appuser'@'%' IDENTIFIED BY 'YourPassword123!';
 GRANT ALL PRIVILEGES ON jet.* TO 'appuser'@'%';
 FLUSH PRIVILEGES;
 🔹 3.6 Enable Remote Access
+
 Edit MySQL config:
 
 sudo nano /etc/mysql/mysql.conf.d/mysqld.cnf
+
 Change:
 
 bind-address = 127.0.0.1
+
 To:
 
 bind-address = 0.0.0.0
@@ -74,6 +78,7 @@ sudo /opt/tomcat9/bin/startup.sh
 git clone https://github.com/Akiranred/aws-rds-java.git
 cd aws-rds-java
 🔹 4.6 Update DB Connection
+
 Edit your JSP/Java file:
 
 Class.forName("com.mysql.cj.jdbc.Driver");
@@ -83,6 +88,7 @@ Connection con = DriverManager.getConnection(
 "appuser",
 "YourPassword123!"
 );
+
 👉 Replace <DB-PRIVATE-IP> with your DB VM private IP.
 
 🔹 4.7 Build Project
@@ -93,10 +99,12 @@ sudo rm -rf /opt/tomcat9/webapps/LoginWebApp*
 sudo cp target/LoginWebApp.war /opt/tomcat9/webapps/
 sudo /opt/tomcat9/bin/startup.sh
 Step 5: Test Application
+
 Open in browser:
 
 http://<APP-PUBLIC-IP>:8080/LoginWebApp
 Step 6: Verify Database Entries
+
 Run on DB VM:
 
 mysql -u appuser -p -e "SELECT * FROM jet.USER;"
